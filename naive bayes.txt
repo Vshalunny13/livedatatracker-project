@@ -1,0 +1,23 @@
+import pandas as pd
+
+data = pd.read_csv("playtennis.csv")
+
+prior = data['answer'].value_counts(normalize=True)
+
+likelihood = {}
+for col in data.columns[:-1]:
+    likelihood[col] = data.groupby('answer')[col].value_counts(normalize=True)
+
+test = data.iloc[0][:-1]
+
+prob = {}
+for cls in prior.index:
+    p = prior[cls]
+    for col in test.index:
+        try:
+            p *= likelihood[col][cls][test[col]]
+        except:
+            p = 0
+    prob[cls] = p
+
+print(max(prob, key=prob.get))  naive bayes

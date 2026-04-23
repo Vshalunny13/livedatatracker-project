@@ -1,0 +1,30 @@
+import numpy as np
+
+data = np.array([
+['Sunny','Warm','Normal','Strong','Warm','Same','Yes'],
+['Sunny','Warm','High','Strong','Warm','Same','Yes'],
+['Rainy','Cold','High','Strong','Warm','Change','No']
+], dtype=object)
+
+X = data[:, :-1]
+Y = data[:, -1]
+
+S = X[0].copy()
+G = [['?' for _ in range(len(S))]]
+
+for i in range(len(X)):
+    if Y[i] == 'Yes':
+        for j in range(len(S)):
+            if X[i][j] != S[j]:
+                S[j] = '?'
+    else:
+        new_G = []
+        for j in range(len(S)):
+            if X[i][j] != S[j]:
+                g = ['?' for _ in range(len(S))]
+                g[j] = S[j]
+                new_G.append(g)
+        G = new_G
+
+print("S:", list(S))
+print("G:", G)

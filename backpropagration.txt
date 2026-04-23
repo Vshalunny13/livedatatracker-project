@@ -1,0 +1,26 @@
+import numpy as np
+
+X = np.array([[2,9],[1,5],[3,6]],dtype=float)
+y = np.array([[92],[86],[89]],dtype=float)
+
+X = X/np.amax(X,axis=0)
+y = y/100
+
+def sig(x): return 1/(1+np.exp(-x))
+def ds(x): return x*(1-x)
+
+wh = np.random.rand(2,3)
+wo = np.random.rand(3,1)
+
+for i in range(5000):
+    h = sig(np.dot(X,wh))
+    o = sig(np.dot(h,wo))
+
+    e = y - o
+    d_o = e * ds(o)
+    d_h = d_o.dot(wo.T) * ds(h)
+
+    wo += h.T.dot(d_o)
+    wh += X.T.dot(d_h)
+
+print(o)

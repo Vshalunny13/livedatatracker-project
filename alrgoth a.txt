@@ -1,0 +1,32 @@
+import heapq
+
+graph = {'A':[('B',2),('C',3)],
+         'B':[('D',4)],
+         'C':[('D',1)],
+         'D':[]}
+
+h = {'A':7,'B':6,'C':2,'D':0}
+
+open_list = []
+heapq.heappush(open_list,(0,'A'))
+
+g = {'A':0}
+parent = {'A':None}
+
+while open_list:
+    f,current = heapq.heappop(open_list)
+
+    if current=='D':
+        path=[]
+        while current:
+            path.append(current)
+            current=parent[current]
+        print(path[::-1])
+        break
+
+    for n,cost in graph[current]:
+        temp = g[current]+cost
+        if n not in g or temp<g[n]:
+            g[n]=temp
+            heapq.heappush(open_list,(temp+h[n],n))
+            parent[n]=current
